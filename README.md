@@ -40,7 +40,7 @@
 2. for predicting results and building GUI:  
     `pip install -r requirements.txt`  
     required packages:  
-    numpy==1.24.2, opencv_python==4.7.0.72, paddle==1.0.2, paddleclas==2.5.1, PyQt5==5.15.9 
+    numpy==1.24.2, opencv_python==4.7.0.72, paddle==1.0.2, paddleclas==2.5.1, PyQt5==5.15.9
 
 ## Project Frame
 
