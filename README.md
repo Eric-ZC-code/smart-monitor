@@ -38,7 +38,8 @@
     `python -m pip install paddlepaddle-gpu -i https://mirror.baidu.com/pypi/simple`
 
 2. for predicting results and building GUI:  
-    requesting packages: [numpy==1.24.2, opencv_python==4.7.0.72, paddle==1.0.2, paddleclas==2.5.1, PyQt5==5.15.9]:  
+    requesting packages:  
+    numpy==1.24.2, opencv_python==4.7.0.72, paddle==1.0.2, paddleclas==2.5.1, PyQt5==5.15.9  
     `pip install -r requirements.txt`
 
 ## Project Frame
