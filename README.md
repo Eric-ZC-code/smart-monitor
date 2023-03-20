@@ -4,7 +4,7 @@
 
 ***`SmartMonitor`*** is a kind of software for detecting abnormal people when monitoring in real-time. It is based on python and Qt, designed to solve detecting problems in specified places, e.g. plants, corridors, etc. We are proud of its user-friendly GUI:  
 
-![SmartMonitor GUI](pic\SmartMonitor_GUI.png "SmartMonitor GUI")
+![SmartMonitor GUI](pic/SmartMonitor_GUI.png "SmartMonitor GUI")
 
 ### Model Pretrained
 
