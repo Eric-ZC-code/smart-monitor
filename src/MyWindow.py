@@ -211,7 +211,7 @@ class MyWindow(QMainWindow):
 
             self.my_signal.emit(msg + "【发现异常人员！！！】") # 显示检测信息
             winsound.Beep(600, 1000) # 电脑发出机器蜂鸣声(Beep)，持续1s
-            requests.post("https://ntfy.sh/zhangchen_test", 
+            requests.post("https://ntfy.sh/zhangchen_test_ch", 
                 data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8')) # 发短信提示
 
             # 保存报警信息
