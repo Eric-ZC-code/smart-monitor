@@ -4,7 +4,7 @@
 
 ***`SmartMonitor`*** is a kind of software for detecting abnormal people when monitoring in real-time. It is based on python and Qt, designed to solve detecting problems in specified places, e.g. plants, corridors, etc. We are proud of its user-friendly GUI:  
 
-![SmartMonitor GUI](pic\SmartMonitor_GUI.png "SmartMonitor GUI")
+![SmartMonitor GUI](pic/SmartMonitor_GUI.png "SmartMonitor GUI")
 
 ### Model Pretrained
 
@@ -45,16 +45,16 @@
 
 The project includes 6 folders:  
 
-1. [`.vscode`](.vscode) includes a [`launch.json`](.vscode\launch.json) for python executive.
-2. [`log`](log) is a resource folder, includes a [`warning.txt`](log\warning.txt) for users to check when they use the software.  
+1. [`.vscode`](.vscode) includes a [`launch.json`](.vscode/launch.json) for python executive.
+2. [`log`](log) is a resource folder, includes a [`warning.txt`](log/warning.txt) for users to check when they use the software.  
 3. [`pic`](pic) is a resource folder, includes several pictures and icons for GUI appearance.  
 4. [`camera_cap`](camera_cap) is a resource folder, includes two folders:  
-    1. [`all`](camera_cap\all) stores all shots in real-time.
-    2. [`positive`](camera_cap\positive) stores the shots that contain people in real-time.
+    1. [`all`](camera_cap/all) stores all shots in real-time.
+    2. [`positive`](camera_cap/positive) stores the shots that contain people in real-time.
 5. [`models`](models) includes required model files (`.pdiparams` and `.pdmodel`), produced after model pretrained.  
 6. [`src`](src) includes required `.py` files and a `.ui` file.
 
 ## Attention
 
-1. [main.py](src\main.py) is the main `output` file.  
-2. [FPS_test](src\FPS_test.py) is a separate `.py` file for **testing the FPS of specified camera**.  
+1. [main.py](src/main.py) is the main `output` file.  
+2. [FPS_test](src/FPS_test.py) is a separate `.py` file for **testing the FPS of specified camera**.  

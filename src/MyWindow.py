@@ -91,6 +91,9 @@ class MyWindow(QMainWindow):
         # 绑定信号和槽
         self.my_signal.connect(self.my_slot)
 
+        # 弹窗输入ntfy topic
+        self.getTopic()
+
     def my_slot(self, msg):
         # 更新内容
         print(msg)
@@ -183,6 +186,15 @@ class MyWindow(QMainWindow):
             window_on = True
             event.ignore()
 
+    # 获取用户在ntfy平台的topic
+    def getTopic(self):
+        topic, ok = QInputDialog.getText(self, "ntfy topic", "请输入你的 ntfy topic", QLineEdit.PasswordEchoOnEdit, text="")
+        if ok & (topic != ""):
+            self.ntfy_topic = "https://ntfy.sh/" + topic
+        else: 
+            self.ntfy_topic = "https://ntfy.sh/app"
+            QMessageBox.warning(self, "warning", "未输入topic，默认接收地址为https://ntfy.sh/app")
+
     def setcamera(self, cap):
         # 摄像头状态
         print('IP摄像头是否开启: {}'.format(cap.isOpened()))
@@ -208,12 +220,12 @@ class MyWindow(QMainWindow):
         class_ids = result[0]['class_ids'][0]
         msg = "正在监测[%s]的实时画面..." % time_stamp
         if class_ids == 1:
-
-            self.my_signal.emit(msg + "【发现异常人员！！！】") # 显示检测信息
-            winsound.Beep(600, 1000) # 电脑发出机器蜂鸣声(Beep)，持续1s
-            requests.post("https://ntfy.sh/zhangchen_test_ch", 
-                data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8')) # 发短信提示
-
+            # 显示检测信息
+            self.my_signal.emit(msg + "【发现异常人员！！！】")
+            # 电脑发出机器蜂鸣声(Beep)，持续1s
+            winsound.Beep(600, 1000)
+            # 发短信提示
+            requests.post(self.ntfy_topic, data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8'))
             # 保存报警信息
             with open(Args.log_path.value + "\\warning.txt", "a") as f:
                 f.write("[%s]的实时画面中出现异常人员\n" % time_stamp)
