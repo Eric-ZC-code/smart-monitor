@@ -9,6 +9,7 @@ class Args(Enum):
     camera_0 = 0 # USB摄像头
     camera_1 = "rtsp://user2:1234abcd@120.224.60.237:554/Streaming/Channels/101" # rtsp协议获取网络摄像头
     # camera_2 = 'http://admin:12345@192.168.1.101:8081/' # http协议获取ip摄像头
+    video_0 = "./camera_cap/gangsters/gangster.mp4" # 歹徒入侵视频
     all_path = "./camera_cap/all"
     pos_path = "./camera_cap/positive"
     log_path = "./log"

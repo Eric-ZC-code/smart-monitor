@@ -214,7 +214,7 @@ class MyWindow(QMainWindow):
         cap.set(cv2.CAP_PROP_FPS, fps)
         print('FPS值为:', cap.get(cv2.CAP_PROP_FPS))
 
-    # 显示检测信息，同时发短信提示，电脑发出机器蜂鸣声(Beep)
+    # 显示检测信息，同时发短信提示
     def warning(self, result, time_stamp):
         global sms
         class_ids = result[0]['class_ids'][0]
@@ -222,8 +222,6 @@ class MyWindow(QMainWindow):
         if class_ids == 1:
             # 显示检测信息
             self.my_signal.emit(msg + "【发现异常人员！！！】")
-            # 电脑发出机器蜂鸣声(Beep)，持续1s
-            winsound.Beep(600, 1000)
             # 发短信提示
             requests.post(self.ntfy_topic, data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8'))
             # 保存报警信息
@@ -276,7 +274,7 @@ class MyWindow(QMainWindow):
         while window_on:
             ret, self.frame = cap.read()
             if ret:
-                cv2.waitKey(0)
+                cv2.waitKey(1)
 
                 # 显示监控图像
                 frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
