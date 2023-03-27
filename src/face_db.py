@@ -1,3 +1,8 @@
+ # -*- coding: utf-8 -*-
+"""
+@author:zhangchen
+@time:2023-03-20
+"""
 import cv2
 import face_recognition
 from parameters import Face
