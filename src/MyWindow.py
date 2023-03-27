@@ -3,15 +3,17 @@
 @author:zhangchen
 @time:2023-03-20
 """
-import sys, ctypes, winsound
+import sys, ctypes
 import threading, cv2, datetime, os, requests
 import numpy as np
 import paddleclas
+import face_recognition
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from parameters import *
+from face_db import know_face_encodings, know_face_names
 from methods import delAll, re_attributes, save_pos
 from ui_Detection import Ui_Form
 
@@ -230,10 +232,32 @@ class MyWindow(QMainWindow):
         else:
             self.my_signal.emit(msg)
 
+    def faceRec(self, know_face_encodings, know_face_names):
+        # 发现人脸的位置
+        locations = face_recognition.face_locations(self.frame)
+
+        # 对图片人脸进行编码
+        face_encodings = face_recognition.face_encodings(self.frame, locations)
+
+        # 遍历locations,face_encodings，识别图片中的人脸
+        for (top, right, bottom, left), face_encoding in zip(locations, face_encodings):
+            # 比较人脸
+            matchs = face_recognition.compare_faces(know_face_encodings, face_encoding)
+            name = 'unknown'
+            for match, know_name in zip(matchs, know_face_names):
+                if match:
+                    name = know_name			
+
+                # 标记人脸位置
+                cv2.rectangle(self.frame, (left, top), (right, bottom), (0,0,255), 1)
+
+                # 标记人脸姓名
+                cv2.putText(self.frame, name, (left, top-20), cv2.FONT_HERSHEY_COMPLEX , 1, (255, 0, 0), 1)
+
     def processFrame(self, lock):
         lock.acquire() # 申请线程锁
 
-        i = -6 # 帧索引（由于线程启动时间差距，前六帧无效）
+        i = -20 # 帧索引（由于线程启动时间差距，前20帧无效）
         while window_on:
             cv2.waitKey(0)
 
@@ -276,6 +300,8 @@ class MyWindow(QMainWindow):
             if ret:
                 cv2.waitKey(1)
 
+                # 标记人脸框
+                self.faceRec(know_face_encodings, know_face_names)
                 # 显示监控图像
                 frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
                 self.img = QImage(frame.data, self.frame.shape[1], self.frame.shape[0], QImage.Format_RGB888)

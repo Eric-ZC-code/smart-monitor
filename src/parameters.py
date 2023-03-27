@@ -31,4 +31,13 @@ class Picture(Enum):
     screenshot_0 = "./pic/screenshot_0"
     screenshot_1 = "./pic/screenshot_1"
 
+class Face(Enum):
+    # face
+    zhangchen = "./pic/face_database/zhangchen.jpg"
+    xintao = "./pic/face_database/xintao.jpg"
+    yihao = "./pic/face_database/yihao.jpg"
+    yixin = "./pic/face_database/yixin.jpg"
+    zhaoyuzhuo = "./pic/face_database/zhaoyuzhuo.jpg"
+
+
 
