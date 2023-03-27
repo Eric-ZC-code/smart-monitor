@@ -47,10 +47,11 @@ The project includes 6 folders:
 
 1. [`.vscode`](.vscode) includes a [`launch.json`](.vscode/launch.json) for python executive.
 2. [`log`](log) is a resource folder, includes a [`warning.txt`](log/warning.txt) for users to check when they use the software.  
-3. [`pic`](pic) is a resource folder, includes several pictures and icons for GUI appearance.  
-4. [`camera_cap`](camera_cap) is a resource folder, includes two folders:  
+3. [`pic`](pic) is a resource folder, includes a folder as a face database and pictures for GUI appearance.  
+4. [`camera_cap`](camera_cap) is a resource folder, includes 3 folders:  
     1. [`all`](camera_cap/all) stores all shots in real-time.
     2. [`positive`](camera_cap/positive) stores the shots that contain people in real-time.
+    3. [`gangsters`](camera_cap/gangsters) store a gangster-intrusion video and gangster pictures.
 5. [`models`](models) includes required model files (`.pdiparams` and `.pdmodel`), produced after model pretrained.  
 6. [`src`](src) includes required `.py` files and a `.ui` file.
 
