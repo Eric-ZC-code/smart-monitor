@@ -1,21 +1,32 @@
  # -*- coding: utf-8 -*-
 """
 @author:zhangchen
-@time:2023-03-20
+@time:2024-04-20
 """
 import cv2
 import face_recognition
 from parameters import Face
 
-face_list = []
-know_face_encodings = []
-know_face_names = []
+# 加载并编码多张图像
+def learn_face():
+    known_face_encodings = []
+    known_face_names = []
 
-for f in Face:
-    face_list.append(cv2.imread(f.value))
-    know_face_names.append(f.name)
+    for name, image_paths in Face.__members__.items():
+        for image_path in image_paths.value:
+            # 加载图像文件
+            image = face_recognition.load_image_file(image_path)
+            # 查找图像中的人脸并编码
+            face_encodings = face_recognition.face_encodings(image)
+            if len(face_encodings) > 0:
+                # 如果图像中存在人脸，则将编码存储到已知人脸编码列表中
+                known_face_encodings.append(face_encodings[0])
+                known_face_names.append(name)
+            else:
+                print("No face found in image:", image_path)
 
-# 对图片中人脸进行编码
-for face in face_list:
-    know_face_encodings.append(face_recognition.face_encodings(face)[0]) # 假设每张图像只有一个人脸
+    return known_face_encodings, known_face_names
+
+# 调用函数学习多张图像
+known_face_encodings, known_face_names = learn_face()
 

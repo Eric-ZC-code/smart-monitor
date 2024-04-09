@@ -13,7 +13,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from parameters import *
-from face_db import know_face_encodings, know_face_names
+from face_db import known_face_encodings, known_face_names
 from methods import delAll, re_attributes, save_pos
 from ui_Detection import Ui_Form
 
@@ -232,7 +232,7 @@ class MyWindow(QMainWindow):
         else:
             self.my_signal.emit(msg)
 
-    def faceRec(self, know_face_encodings, know_face_names):
+    def faceRec(self, known_face_encodings, known_face_names):
         # 发现人脸的位置
         locations = face_recognition.face_locations(self.frame)
 
@@ -242,13 +242,13 @@ class MyWindow(QMainWindow):
         # 遍历locations,face_encodings，识别图片中的人脸
         for (top, right, bottom, left), face_encoding in zip(locations, face_encodings):
             # 比较人脸
-            matches = face_recognition.compare_faces(know_face_encodings, face_encoding)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
 
             # 查找匹配的人脸
             name = "unknown"
             if True in matches:
                 index = matches.index(True)
-                name = know_face_names[index]	
+                name = known_face_names[index]	
 
                 # 标记人脸位置
                 cv2.rectangle(self.frame, (left, top), (right, bottom), (0,0,255), 1)
@@ -303,7 +303,7 @@ class MyWindow(QMainWindow):
                 cv2.waitKey(1)
 
                 # 标记人脸框
-                self.faceRec(know_face_encodings, know_face_names)
+                self.faceRec(known_face_encodings, known_face_names)
                 # 显示监控图像
                 frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
                 self.img = QImage(frame.data, self.frame.shape[1], self.frame.shape[0], QImage.Format_RGB888)

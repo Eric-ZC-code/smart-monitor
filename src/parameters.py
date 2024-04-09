@@ -1,7 +1,7 @@
  # -*- coding: utf-8 -*-
 """
 @author:zhangchen
-@time:2023-03-20
+@time:2024-04-20
 """
 from enum import Enum
 
@@ -33,11 +33,15 @@ class Picture(Enum):
 
 class Face(Enum):
     # face
-    xintao = "./pic/face_database/xintao.jpg"
-    yihao = "./pic/face_database/yihao.jpg"
-    yixin = "./pic/face_database/yixin.jpg"
-    zhaoyuzhuo = "./pic/face_database/zhaoyuzhuo.jpg"
-    zhangchen = "./pic/face_database/zhangchen.jpg"
+    xintao = ["./pic/face_database/xintao.jpg"]
+    yihao = ["./pic/face_database/yihao.jpg"]
+    yixin = ["./pic/face_database/yixin.jpg"]
+    zhaoyuzhuo = ["./pic/face_database/zhaoyuzhuo.jpg"]
+    zhangchen = ["./pic/face_database/zhangchen/1.jpg", 
+                 "./pic/face_database/zhangchen/2.jpg", 
+                 "./pic/face_database/zhangchen/3.jpg",
+                 "./pic/face_database/zhangchen/4.jpg",
+                 "./pic/face_database/zhangchen/5.jpg",]
 
 
 
