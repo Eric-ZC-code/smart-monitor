@@ -3,7 +3,7 @@
 @author:zhangchen
 @time:2024-04-20
 """
-import cv2
+
 import face_recognition
 from parameters import Face
 
