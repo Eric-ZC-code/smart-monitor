@@ -242,11 +242,13 @@ class MyWindow(QMainWindow):
         # 遍历locations,face_encodings，识别图片中的人脸
         for (top, right, bottom, left), face_encoding in zip(locations, face_encodings):
             # 比较人脸
-            matchs = face_recognition.compare_faces(know_face_encodings, face_encoding)
-            name = 'unknown'
-            for match, know_name in zip(matchs, know_face_names):
-                if match:
-                    name = know_name			
+            matches = face_recognition.compare_faces(know_face_encodings, face_encoding)
+
+            # 查找匹配的人脸
+            name = "unknown"
+            if True in matches:
+                index = matches.index(True)
+                name = know_face_names[index]	
 
                 # 标记人脸位置
                 cv2.rectangle(self.frame, (left, top), (right, bottom), (0,0,255), 1)

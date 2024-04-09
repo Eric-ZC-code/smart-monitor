@@ -17,5 +17,5 @@ for f in Face:
 
 # 对图片中人脸进行编码
 for face in face_list:
-    know_face_encodings.append(face_recognition.face_encodings(face)[0])
+    know_face_encodings.append(face_recognition.face_encodings(face)[0]) # 假设每张图像只有一个人脸
 
