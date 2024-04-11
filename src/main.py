@@ -3,13 +3,11 @@
 @author:zhangchen
 @time:2023-03-20
 """
-import sys, ctypes
+import sys
 from PyQt5.QtWidgets import *
 from MyWindow import MyWindow
 
-
-if __name__ == "__main__" :
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
+if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     win = MyWindow()
