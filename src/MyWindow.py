@@ -292,7 +292,7 @@ class MyWindow(QMainWindow):
         lock.acquire() # 申请线程锁
 
         # 创建摄像头
-        cap = cv2.VideoCapture(Args.camera_0.value)
+        cap = cv2.VideoCapture(Args.camera_3.value)
         # 设置camera信息
         self.setcamera(cap)
 
