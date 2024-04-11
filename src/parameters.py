@@ -9,7 +9,7 @@ class Args(Enum):
     camera_0 = 0 # USB摄像头
     camera_1 = "rtsp://user2:1234abcd@120.224.60.237:554/Streaming/Channels/101" # rtsp协议获取网络摄像头
     camera_2 = 'http://admin:12345@192.168.1.101:8081/' # http协议获取ip摄像头
-    camera_3 = "http://192.168.137.2:8000/stream.mjpg" # http协议获取网络摄像头
+    camera_3 = "http://192.168.137.2:8000/stream.mjpg" # http协议获取mjpg流媒体
     video_0 = "./camera_cap/gangsters/gangster.mp4" # 歹徒入侵视频
     all_path = "./camera_cap/all"
     pos_path = "./camera_cap/positive"
@@ -34,15 +34,12 @@ class Picture(Enum):
 
 class Face(Enum):
     # face
-    xintao = ["./pic/face_database/xintao.jpg"]
-    yihao = ["./pic/face_database/yihao.jpg"]
-    yixin = ["./pic/face_database/yixin.jpg"]
-    zhaoyuzhuo = ["./pic/face_database/zhaoyuzhuo.jpg"]
-    zhangchen = ["./pic/face_database/zhangchen/1.jpg", 
-                 "./pic/face_database/zhangchen/2.jpg", 
-                 "./pic/face_database/zhangchen/3.jpg",
-                 "./pic/face_database/zhangchen/4.jpg",
-                 "./pic/face_database/zhangchen/5.jpg",]
+    xintao = "./pic/face_db/xintao.jpg"
+    yihao = "./pic/face_db/yihao.jpg"
+    yixin = "./pic/face_db/yixin.jpg"
+    zhaoyuzhuo = "./pic/face_db/zhaoyuzhuo.jpg"
+    zhangchen = "./pic/face_db/zhangchen.jpg"
+    sunchen = "./pic/face_db/sunchen.jpg"
 
 
 

@@ -13,9 +13,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from parameters import *
-from face_db import known_face_encodings, known_face_names
 from methods import delAll, re_attributes, save_pos
 from ui_Detection import Ui_Form
+from deal_face import face_recog
+from face_db import known_face_encodings, known_face_names
 
 
 window_on = True
@@ -242,13 +243,12 @@ class MyWindow(QMainWindow):
         # 遍历locations,face_encodings，识别图片中的人脸
         for (top, right, bottom, left), face_encoding in zip(locations, face_encodings):
             # 比较人脸
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.49)
 
             # 查找匹配的人脸
-            name = "unknown"
             if True in matches:
                 index = matches.index(True)
-                name = known_face_names[index]	
+                name = known_face_names[index]
 
                 # 标记人脸位置
                 cv2.rectangle(self.frame, (left, top), (right, bottom), (0,0,255), 1)
@@ -293,7 +293,7 @@ class MyWindow(QMainWindow):
         lock.acquire() # 申请线程锁
 
         # 创建摄像头
-        cap = cv2.VideoCapture(Args.camera_3.value)
+        cap = cv2.VideoCapture(Args.camera_0.value)
         # 设置camera信息
         self.setcamera(cap)
 
