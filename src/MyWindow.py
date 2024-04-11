@@ -15,7 +15,6 @@ from PyQt5.QtWidgets import *
 from parameters import *
 from methods import delAll, re_attributes, save_pos
 from ui_Detection import Ui_Form
-from deal_face import face_recog
 from face_db import known_face_encodings, known_face_names
 
 
