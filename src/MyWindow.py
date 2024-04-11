@@ -93,8 +93,8 @@ class MyWindow(QMainWindow):
         # 绑定信号和槽
         self.my_signal.connect(self.my_slot)
 
-        # 弹窗输入ntfy topic
-        self.getTopic()
+        # # 弹窗输入ntfy topic
+        # self.getTopic()
 
     def my_slot(self, msg):
         # 更新内容
@@ -224,8 +224,8 @@ class MyWindow(QMainWindow):
         if class_ids == 1:
             # 显示检测信息
             self.my_signal.emit(msg + "【发现异常人员！！！】")
-            # 发短信提示
-            requests.post(self.ntfy_topic, data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8'))
+            # # 发短信提示
+            # requests.post(self.ntfy_topic, data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8'))
             # 保存报警信息
             with open(Args.log_path.value + "\\warning.txt", "a") as f:
                 f.write("[%s]的实时画面中出现异常人员\n" % time_stamp)
@@ -293,7 +293,7 @@ class MyWindow(QMainWindow):
         lock.acquire() # 申请线程锁
 
         # 创建摄像头
-        cap = cv2.VideoCapture(Args.camera_0.value)
+        cap = cv2.VideoCapture(Args.camera_3.value)
         # 设置camera信息
         self.setcamera(cap)
 
@@ -335,9 +335,6 @@ class MyWindow(QMainWindow):
         for thread in threads:
             thread.setDaemon(True)
             thread.start()
-
-        # print(threading.active_count())
-        # print(threading.enumerate())
 
     def camera(self):
         # 删除数据库原有文件
