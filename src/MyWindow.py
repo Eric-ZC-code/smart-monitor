@@ -3,7 +3,7 @@
 @author:zhangchen
 @time:2023-03-20
 """
-import sys, ctypes
+import sys, ctypes, time
 import threading, cv2, datetime, os, requests
 import numpy as np
 import paddleclas
@@ -225,9 +225,9 @@ class MyWindow(QMainWindow):
         if class_ids == 1:
             # 显示检测信息
             if self.person == "Unknown":
-                self.my_signal.emit(msg + "【发现异常人员！！！】")
+                self.my_signal.emit(msg + "发现异常人员！！！")
             else:
-                self.my_signal.emit(msg + "【人脸识别通过，欢迎【%s】回家" % self.person)
+                self.my_signal.emit(msg + "人脸识别通过，欢迎【%s】回家" % self.person)
             # # 发短信提示
             # requests.post(self.ntfy_topic, data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8'))
             # 保存报警信息
@@ -258,7 +258,11 @@ class MyWindow(QMainWindow):
 
                 # 标记人脸姓名
                 cv2.putText(self.frame, name, (left, top-20), cv2.FONT_HERSHEY_COMPLEX , 1, (255, 0, 0), 1)
-
+                
+                return name
+            
+        return "Unknown"
+        
     def faceRec(self):
         # 发现人脸的位置
         locations = face_recognition.face_locations(self.frame)
@@ -324,7 +328,7 @@ class MyWindow(QMainWindow):
 
                 # 人脸识别
                 if frame_count % FPS == 0:
-                    self.person = self.faceRec()
+                    self.person = self.faceDraw()
 
                 # 显示监控图像
                 frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
