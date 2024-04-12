@@ -17,8 +17,7 @@ from methods import delAll, re_attributes, save_pos
 from ui_Detection import Ui_Form
 from face_db import known_face_encodings, known_face_names
 
-
-window_on = True
+FPS = 30
 
 class MyWindow(QMainWindow):
     # 声明一个信号
@@ -30,6 +29,9 @@ class MyWindow(QMainWindow):
         self.imgName = []
         self.msg_history = list()  # 用来存放消息
         self.frame = np.zeros((480, 640, 3), dtype=np.uint8)
+        self.model = paddleclas.PaddleClas(inference_model_dir=Models.person_exist.value, batch_size=64)
+        self.window_on = True
+        self.person = "Unknown"
 
     def init_ui(self):
         self.ui = Ui_Form()
@@ -180,12 +182,11 @@ class MyWindow(QMainWindow):
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Warning', '确认退出？', QMessageBox.Yes, QMessageBox.No)
-        global window_on
         if reply == QMessageBox.Yes:
-            window_on = False
+            self.window_on = False
             event.accept()
         else:
-            window_on = True
+            self.window_on = True
             event.ignore()
 
     # 获取用户在ntfy平台的topic
@@ -212,7 +213,7 @@ class MyWindow(QMainWindow):
         print('height:', cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
  
         # 设置FPS
-        fps = 30
+        fps = FPS
         cap.set(cv2.CAP_PROP_FPS, fps)
         print('FPS值为:', cap.get(cv2.CAP_PROP_FPS))
 
@@ -223,16 +224,19 @@ class MyWindow(QMainWindow):
         msg = "正在监测[%s]的实时画面..." % time_stamp
         if class_ids == 1:
             # 显示检测信息
-            self.my_signal.emit(msg + "【发现异常人员！！！】")
+            if self.person == "Unknown":
+                self.my_signal.emit(msg + "【发现异常人员！！！】")
+            else:
+                self.my_signal.emit(msg + "【人脸识别通过，欢迎【%s】回家" % self.person)
             # # 发短信提示
             # requests.post(self.ntfy_topic, data = (msg + "【发现异常人员！！！】").encode(encoding='utf-8'))
             # 保存报警信息
             with open(Args.log_path.value + "\\warning.txt", "a") as f:
-                f.write("[%s]的实时画面中出现异常人员\n" % time_stamp)
+                f.write("[%s]的实时画面中出现人员" % time_stamp + "【%s】\n" % self.person)
         else:
             self.my_signal.emit(msg)
 
-    def faceRec(self, known_face_encodings, known_face_names):
+    def faceDraw(self):
         # 发现人脸的位置
         locations = face_recognition.face_locations(self.frame)
 
@@ -255,11 +259,30 @@ class MyWindow(QMainWindow):
                 # 标记人脸姓名
                 cv2.putText(self.frame, name, (left, top-20), cv2.FONT_HERSHEY_COMPLEX , 1, (255, 0, 0), 1)
 
-    def processFrame(self, lock):
-        lock.acquire() # 申请线程锁
+    def faceRec(self):
+        # 发现人脸的位置
+        locations = face_recognition.face_locations(self.frame)
 
+        # 对图片人脸进行编码
+        face_encodings = face_recognition.face_encodings(self.frame, locations)
+
+        # 遍历locations,face_encodings，识别图片中的人脸
+        for face_encoding in face_encodings:
+            # 比较人脸
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.49)
+
+            # 查找匹配的人脸
+            if True in matches:
+                index = matches.index(True)
+                name = known_face_names[index]
+                return name
+
+        # 如果没有匹配的人脸，则返回未知
+        return "Unknown"
+
+    def processFrame(self):
         i = -20 # 帧索引（由于线程启动时间差距，前20帧无效）
-        while window_on:
+        while self.window_on:
             cv2.waitKey(0)
 
             # 图片以时间戳命名
@@ -271,7 +294,7 @@ class MyWindow(QMainWindow):
             cv2.imwrite(frame_path, self.frame)
 
             # 检测有人/无人
-            model_e = paddleclas.PaddleClas(inference_model_dir=Models.person_exist.value, batch_size=64)
+            model_e = self.model
             result_e = model_e.predict(input_data=frame_path)
             
             # 处理检测结果
@@ -286,27 +309,30 @@ class MyWindow(QMainWindow):
             # 帧索引+1
             i = i + 1
 
-        lock.release() # 释放线程锁
-
-    def monitor(self, lock):
-        lock.acquire() # 申请线程锁
-
+    def monitor(self):
         # 创建摄像头
-        cap = cv2.VideoCapture(Args.camera_3.value)
+        cap = cv2.VideoCapture(Args.camera_0.value)
         # 设置camera信息
         self.setcamera(cap)
+        # 帧计数
+        frame_count = 0
 
-        while window_on:
+        while self.window_on:
             ret, self.frame = cap.read()
             if ret:
                 cv2.waitKey(1)
 
-                # 标记人脸框
-                self.faceRec(known_face_encodings, known_face_names)
+                # 人脸识别
+                if frame_count % FPS == 0:
+                    self.person = self.faceRec()
+
                 # 显示监控图像
                 frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
                 self.img = QImage(frame.data, self.frame.shape[1], self.frame.shape[0], QImage.Format_RGB888)
                 self.lab1.setPixmap(QPixmap(self.img))
+
+                # 帧计数+1
+                frame_count += 1            
             else:
                 break
 
@@ -315,15 +341,11 @@ class MyWindow(QMainWindow):
         # 销毁所有窗口
         cv2.destroyAllWindows()
 
-        lock.release() # 释放线程锁
 
     def camera_threads(self):
-        # 创建线程锁，并行线程数量上限设为10
-        lock = threading.BoundedSemaphore(10)
-
         # 创建线程
-        thread_monitor = threading.Thread(target=self.monitor, args=(lock,), name="thread_monitor")
-        thread_processFrame = threading.Thread(target=self.processFrame, args=(lock,), name="thread_processFrame")
+        thread_monitor = threading.Thread(target=self.monitor, name="thread_monitor")
+        thread_processFrame = threading.Thread(target=self.processFrame, name="thread_processFrame")
 
         # 把线程添加到线程列表
         threads = []
